@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Học liệu tương tác Khoa học tự nhiên 6, Bài 20: Sự lớn lên và sinh sản của tế bào.">
+<title>Hành trình của tế bào | KHTN 6</title>
+<style>
+:root{
+  --ink:#183449;--ink2:#31566b;--muted:#698191;--paper:#f4f8fa;--white:#fff;
+  --blue:#246d91;--blue2:#e8f2f7;--teal:#16877e;--teal2:#e8f5f2;
+  --gold:#e7a93d;--gold2:#fff5df;--line:#d9e5ea;--red:#b94e50;--red2:#fff0ef;
+  --shadow:0 12px 34px rgba(24,52,73,.08);--radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.55}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #efbd63;outline-offset:3px}
+.wrap{width:min(1180px,calc(100% - 36px));margin-inline:auto}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 82% 15%,rgba(255,255,255,.18),transparent 24%),linear-gradient(120deg,#143e59,#1c6a79 60%,#258d85);color:white;padding:40px 0 30px}
+.hero:after{content:"";position:absolute;width:390px;height:390px;border:1px solid #ffffff22;border-radius:50%;right:-90px;top:-210px;box-shadow:0 0 0 42px #ffffff0b,0 0 0 84px #ffffff08}
+.hero-inner{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;gap:32px}
+.eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#b9e8e1}
+h1{font-size:clamp(2rem,5vw,3.4rem);letter-spacing:-.04em;line-height:1.02;margin:9px 0 8px}
+.hero-sub{font-size:1.15rem;color:#d7f0ee;margin:0}
+.hero-intro{max-width:690px;color:#e6f3f4;margin:16px 0 0}
+.hero-stamp{flex:0 0 140px;height:140px;border-radius:34px;background:#ffffff12;border:1px solid #ffffff35;display:grid;place-items:center;transform:rotate(5deg)}
+.hero-stamp svg{width:100px;height:100px}
+main{padding:26px 0 60px}
+.flowbar{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:22px}
+.flow-step{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;display:flex;gap:10px;align-items:center;color:var(--muted);font-weight:750;text-align:left;box-shadow:0 2px 8px #193d5108;transition:.2s}
+.flow-step .circle{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#edf2f4;color:#657b88;font-size:.84rem;flex:0 0 auto}
+.flow-step.active{border-color:#8fc5c4;background:#f0faf8;color:#176e6a;box-shadow:0 5px 18px #16877e16}
+.flow-step.active .circle,.flow-step.done .circle{background:var(--teal);color:#fff}
+.flow-step.done{color:var(--ink2)}
+.flow-step:disabled{opacity:.55;cursor:not-allowed}
+.panel{display:none;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.panel.active{display:block;animation:appear .28s ease}
+@keyframes appear{from{opacity:.35;transform:translateY(7px)}to{opacity:1;transform:none}}
+.panel-head{padding:25px 28px 18px;border-bottom:1px solid var(--line);background:linear-gradient(120deg,#f6fbfd,#f2faf8)}
+.kicker{font-size:.73rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+h2{font-size:clamp(1.35rem,3vw,1.8rem);line-height:1.2;margin:5px 0 8px;letter-spacing:-.025em}
+.panel-head p{margin:0;color:var(--muted);max-width:850px}
+.panel-body{padding:24px 28px 30px}
+.scenario{display:grid;grid-template-columns:minmax(230px,.78fr) minmax(0,1.45fr);gap:20px;align-items:stretch;margin-bottom:22px}
+.micro-card{background:#142b38;border-radius:17px;padding:15px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;min-height:235px;overflow:hidden}
+.micro-card .label{font-size:.72rem;color:#a8d6dc;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.micro-card img{width:100%;height:150px;object-fit:contain;mix-blend-mode:screen;border-radius:9px}
+.micro-card small{color:#b6cbd3}
+.question-story{background:#f5fafb;border:1px solid #dfebef;border-radius:17px;padding:20px 22px}
+.question-story .tag{display:inline-flex;padding:5px 10px;border-radius:30px;background:var(--gold2);color:#8b5b14;font-size:.74rem;font-weight:800}
+.question-story h3{font-size:1.25rem;line-height:1.35;margin:12px 0 8px}
+.question-story p{color:var(--ink2);margin:0}
+.question-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.q-card{border:1px solid var(--line);border-radius:16px;padding:17px;background:#fff;min-width:0}
+.q-number{font-size:.72rem;color:var(--teal);font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.q-card h3{font-size:1rem;line-height:1.42;margin:7px 0 13px}
+.choice{display:flex;gap:9px;align-items:flex-start;border:1px solid #e0e9ed;background:#fbfdfe;border-radius:11px;padding:9px 10px;margin:7px 0;cursor:pointer;font-size:.9rem;transition:.15s}
+.choice:hover{border-color:#91bcbf;background:#f4fbfa}
+.choice input{margin:4px 0 0;accent-color:var(--teal);flex:0 0 auto}
+.choice:has(input:checked){border-color:#56a7a0;background:#eff9f7}
+.reason-box{margin-top:19px;padding:17px;border:1px dashed #b9cfd8;border-radius:15px;background:#fbfdfe}
+.reason-box label{font-weight:800;display:block;margin-bottom:7px}
+textarea{width:100%;min-height:82px;resize:vertical;border:1px solid #d6e2e8;border-radius:11px;padding:11px 13px;color:var(--ink);background:white}
+textarea::placeholder{color:#9aaeb8}
+.form-foot{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.small-note{font-size:.83rem;color:var(--muted)}
+.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,filter .15s}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.btn-primary{background:var(--teal);color:white;box-shadow:0 5px 12px #16877e25}
+.btn-blue{background:var(--blue);color:white}
+.btn-light{background:#edf4f7;color:#31566b;border:1px solid #d7e4e9}
+.btn-gold{background:var(--gold2);color:#875911;border:1px solid #f1ddb1}
+.btn:disabled{opacity:.48;cursor:not-allowed;transform:none}
+.notice{border-radius:12px;padding:12px 14px;margin-top:14px;font-size:.9rem;display:none}
+.notice.show{display:block}
+.notice.info{background:#eef7fa;color:#315b70;border:1px solid #d4e6ed}
+.notice.error{background:var(--red2);color:#8f383b;border:1px solid #f0cecd}
+.notice.success{background:var(--teal2);color:#176b63;border:1px solid #cbe7e1}
+.observe-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;align-items:stretch}
+.observe-card{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden;min-width:0}
+.observe-head{padding:16px 18px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.observe-head h3{font-size:1.04rem;margin:0;color:#23536c}
+.observe-head p{font-size:.83rem;color:var(--muted);margin:3px 0 0}
+.status-pill{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:850;border-radius:30px;padding:5px 9px;background:#edf3f5;color:#667d89;white-space:nowrap}
+.status-pill:before{content:"";width:7px;height:7px;border-radius:50%;background:#9aabb4}
+.status-pill.ready{background:#eaf7f3;color:#167568}.status-pill.ready:before{background:#20a18f}
+.video-frame{position:relative;margin:0 14px;border-radius:13px;overflow:hidden;background:#12232d;min-height:190px}
+video{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#14232b}
+.video-error-cover{display:none;position:absolute;inset:0;background:#172e3b;color:white;place-items:center;text-align:center;padding:24px;font-size:.9rem}
+.video-error-cover.show{display:grid}
+.video-error-cover strong{display:block;font-size:1.1rem;margin-bottom:6px;color:#ffdb9c}
+.video-under{padding:11px 16px 14px;font-size:.81rem;color:var(--muted)}
+.video-under a{color:var(--blue);font-weight:750}
+.segment-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0 14px 14px}
+.segment-btn{text-align:left;background:#f6fafb;border:1px solid #dce8ed;border-radius:11px;padding:10px 11px;color:var(--ink);min-width:0}
+.segment-btn strong{display:block;font-size:.82rem;color:#2c5c71;line-height:1.3}
+.segment-btn span{display:block;font-size:.74rem;color:var(--muted);margin-top:3px}
+.segment-btn.active{background:#eaf7f4;border-color:#78bcb2;box-shadow:inset 0 0 0 1px #78bcb2}
+.segment-btn:focus-visible{outline:3px solid #e7b65d}
+.model-card{background:linear-gradient(180deg,#f9fcfd,#f4f9fa)}
+.model-tabs{display:flex;gap:7px;padding:0 16px 13px}
+.model-tab{border:1px solid #d7e4e8;border-radius:10px;padding:8px 11px;background:#fff;color:#5e7785;font-size:.82rem;font-weight:800}
+.model-tab.active{background:#e7f5f2;color:#176d65;border-color:#9bcfc4}
+.sync-view,.growth-view{padding:0 15px 15px}
+.model-canvas{position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 46%,#fff 0,#f2f8fa 68%);border:1px solid #dce9ed;border-radius:14px;min-height:235px;overflow:hidden}
+.model-canvas svg{width:100%;max-width:430px;height:auto;max-height:250px}
+.model-count{position:absolute;top:10px;right:11px;background:#e8f5f2;color:#176f67;border:1px solid #cbe6df;border-radius:30px;padding:5px 9px;font-size:.75rem;font-weight:850}
+.model-caption{padding:12px 2px 4px}
+.model-caption strong{display:block;color:#235b70;font-size:.99rem}
+.model-caption p{margin:3px 0 0;color:var(--muted);font-size:.85rem;min-height:42px}
+.sync-legend{display:flex;gap:13px;flex-wrap:wrap;font-size:.75rem;color:#607d8b;margin-top:5px}
+.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:#76bfc2;border:1px solid #3d898c}
+.legend-dot.nuc{background:#7f91c4;border-color:#596b9b}
+.growth-range{display:flex;align-items:center;gap:12px;padding:11px 0 2px;flex-wrap:wrap}
+.growth-range input{flex:1;min-width:120px;accent-color:var(--teal)}
+.growth-stage{font-weight:850;color:var(--teal);font-size:.89rem;min-width:155px}
+.growth-info{border-radius:12px;background:#edf7f5;padding:11px 13px;color:#315e60;font-size:.85rem;margin-top:9px}
+.model-lock-note{font-size:.8rem;border-left:3px solid var(--gold);padding:7px 10px;background:#fff8e9;color:#765a29;margin:8px 0 0;border-radius:0 8px 8px 0}
+.sync-controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.model-stage-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}
+.model-stage-list .segment-btn{padding:8px 9px}
+.model-stage-list .segment-btn strong{font-size:.78rem}
+.model-stage-list .segment-btn span{font-size:.7rem}
+.sync-controls .btn{font-size:.8rem;padding:8px 11px}
+.current-segment{font-size:.76rem;color:var(--teal);font-weight:850;margin-top:5px}
+.observation-task{margin-top:19px;border:1px solid var(--line);border-radius:16px;padding:18px;background:#fbfdfe}
+.observation-task h3{margin:0 0 4px;font-size:1rem}
+.observation-task p{margin:0 0 11px;color:var(--muted);font-size:.87rem}
+.evidence-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.evidence-grid .choice{margin:0}
+.task-result{font-size:.88rem;font-weight:750;margin-top:10px}
+.number-lab{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px;align-items:center;margin-top:20px;padding:19px;border-radius:17px;background:linear-gradient(120deg,#eff7fa,#edf8f5);border:1px solid #d7e9e8}
+.number-lab h3{margin:0 0 5px}.number-lab p{margin:0;color:var(--muted);font-size:.87rem}
+.cycle-control{display:flex;align-items:center;gap:12px;margin-top:13px}.cycle-control input{flex:1;accent-color:var(--teal)}
+.count-label{font-size:1.4rem;font-weight:900;color:#137b73;white-space:nowrap}
+.cell-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:center;justify-items:center;min-height:112px;padding:8px}
+.mini-cell{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#d7f0ee,#8fc9c5 70%);border:2px solid #438f91;position:relative;box-shadow:inset -4px -4px 0 #69aaa8}
+.mini-cell:after{content:"";position:absolute;width:11px;height:11px;border-radius:50%;background:#7e8fbe;border:1px solid #5c6e9e;left:9px;top:9px}
+.number-note{font-size:.76rem;color:#65808e;margin-top:5px}
+.prediction-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.compare-box{padding:15px;border-radius:14px;border:1px solid var(--line);background:#fbfdfe}
+.compare-box h3{font-size:.9rem;margin:0 0 9px;color:#315d72}
+.compare-box p{margin:5px 0;font-size:.85rem;color:var(--ink2)}
+.compare-box .ans{font-weight:850;color:#176d65}
+.revision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.revision-grid .q-card{background:#fbfdfe}
+.explain-panel{margin-top:18px;padding:17px;border-radius:15px;border:1px solid var(--line);background:#fff}
+.explain-panel h3{margin:0 0 6px;font-size:1rem}
+.rubric{display:none;margin-top:13px;padding:14px;border-radius:12px;background:#eff8f5;border:1px solid #cfe7df}
+.rubric.show{display:block}
+.rubric label{display:flex;gap:9px;margin:8px 0;font-size:.88rem;align-items:flex-start}
+.rubric input{margin-top:4px;accent-color:var(--teal)}
+.quiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.quiz-item{border:1px solid var(--line);border-radius:15px;padding:16px;background:#fff}
+.quiz-item h3{font-size:.96rem;line-height:1.4;margin:0 0 11px}
+.quiz-item .choice{font-size:.86rem}
+.quiz-feedback{display:none;font-size:.83rem;padding:10px 11px;border-radius:10px;margin-top:9px}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#eaf7f1;color:#176a50;border:1px solid #c6e5d6}
+.quiz-feedback.wrong{background:#fff0ef;color:#9a4143;border:1px solid #f0d0ce}
+.quiz-item.correct-answer{border-color:#8dc8a9}
+.quiz-item.wrong-answer{border-color:#e1a3a1}
+.score-panel{display:none;margin-top:17px;padding:18px;border-radius:16px;background:#edf7f5;border:1px solid #cbe5df}
+.score-panel.show{display:block}
+.score-big{font-size:2rem;font-weight:950;color:#14796f;line-height:1}
+.score-panel p{margin:6px 0 0;color:#466b6b}
+.panel-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.footer{text-align:center;color:#8aa0aa;font-size:.79rem;padding:23px 0 4px}
+.source-box{font-size:.8rem;color:#738b97;margin-top:13px}
+.source-box a{color:var(--blue)}
+@media(max-width:900px){.hero-stamp{display:none}.question-grid{grid-template-columns:1fr}.revision-grid{grid-template-columns:1fr}.observe-grid{grid-template-columns:1fr}.quiz-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.wrap{width:calc(100% - 22px)}.hero{padding:29px 0 24px}.hero-inner{display:block}.flowbar{grid-template-columns:repeat(2,1fr)}.flow-step{font-size:.78rem;padding:9px}.panel-head{padding:20px 17px 15px}.panel-body{padding:17px}.scenario{grid-template-columns:1fr}.micro-card{min-height:195px}.micro-card img{height:125px}.number-lab{grid-template-columns:1fr}.prediction-compare{grid-template-columns:1fr}.evidence-grid{grid-template-columns:1fr}.observe-head{flex-wrap:wrap}.segment-list{grid-template-columns:1fr 1fr}.form-foot{align-items:stretch}.form-foot .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hero">
+ <div class="wrap hero-inner">
+  <div>
+   <div class="eyebrow">Khoa học tự nhiên 6 · Kết nối tri thức với cuộc sống · Bài 20</div>
+   <h1>HÀNH TRÌNH<br>CỦA TẾ BÀO</h1>
+   <p class="hero-sub">Từ lớn lên đến sinh sản</p>
+   <p class="hero-intro">Cơ thể sinh vật lớn lên theo thời gian. Ở cấp độ tế bào, điều gì đang diễn ra? Hãy dự đoán, quan sát video kính hiển vi và điều khiển mô hình để tự tìm lời giải.</p>
+  </div>
+  <div class="hero-stamp" aria-hidden="true">
+   <svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="42" stroke="#b8ebe3" stroke-width="3"/><circle cx="60" cy="60" r="25" fill="#8ccac5" fill-opacity=".45" stroke="#d8faf2" stroke-width="2"/><circle cx="60" cy="60" r="9" fill="#8d9dca" stroke="#dce6ff" stroke-width="2"/><path d="M16 60h13M91 60h13M60 16v13M60 91v13" stroke="#e1faf3" stroke-width="3" stroke-linecap="round"/><circle cx="28" cy="30" r="4" fill="#e6bc6e"/><circle cx="92" cy="88" r="4" fill="#e6bc6e"/></svg>
+  </div>
+ </div>
+</header>
+<main class="wrap">
+ <nav class="flowbar" aria-label="Các bước học tập">
+  <button class="flow-step active" data-step="1"><span class="circle">01</span><span>Dự đoán</span></button>
+  <button class="flow-step" data-step="2" disabled><span class="circle">02</span><span>Quan sát</span></button>
+  <button class="flow-step" data-step="3" disabled><span class="circle">03</span><span>Giải thích</span></button>
+  <button class="flow-step" data-step="4" disabled><span class="circle">04</span><span>Kiểm tra</span></button>
+ </nav>
+
+ <!-- STEP 1: PREDICT -->
+ <section class="panel active" id="step1">
+  <div class="panel-head">
+   <div class="kicker">P · Predict — Dự đoán</div>
+   <h2>Trước khi xem, em nghĩ điều gì sẽ xảy ra?</h2>
+   <p>Chưa có đáp án đúng hay sai ở bước này. Hãy ghi lại suy nghĩ ban đầu để sau khi quan sát, em có thể kiểm chứng và điều chỉnh dự đoán của mình.</p>
+  </div>
+  <div class="panel-body">
+   <div class="scenario">
+    <div class="micro-card">
+     <div class="label">Tình huống quan sát</div>
+     <img src="assets/cell-video-poster.jpg" alt="Ảnh tế bào ở thời điểm đầu của video kính hiển vi">
+     <small>Một tế bào được ghi hình liên tục qua kính hiển vi.</small>
+    </div>
+    <div class="question-story">
+     <span class="tag">Câu hỏi khám phá</span>
+     <h3>Nếu tiếp tục quan sát tế bào này trong một khoảng thời gian, em dự đoán điều gì sẽ xảy ra? Và những tế bào mới hình thành sẽ tiếp tục như thế nào?</h3>
+     <p>Hãy nghĩ về số lượng tế bào, hình dạng của tế bào trong quá trình biến đổi và điều có thể xảy ra với những tế bào mới hình thành.</p>
+    </div>
+   </div>
+   <form id="predictionForm">
+    <div class="question-grid">
+     <article class="q-card">
+      <div class="q-number">Dự đoán 01 · Số lượng</div>
+      <h3>Ở cuối đoạn ghi hình, em nghĩ sẽ quan sát được:</h3>
+      <label class="choice"><input type="radio" name="p1" value="one"> Vẫn chỉ có một tế bào.</label>
+      <label class="choice"><input type="radio" name="p1" value="two"> Hai tế bào được hình thành từ tế bào ban đầu.</label>
+      <label class="choice"><input type="radio" name="p1" value="many"> Nhiều hơn hai tế bào được hình thành ngay trong lần này.</label>
+     </article>
+     <article class="q-card">
+      <div class="q-number">Dự đoán 02 · Dấu hiệu</div>
+      <h3>Nếu tế bào phân chia, em dự đoán hình dạng của nó sẽ:</h3>
+      <label class="choice"><input type="radio" name="p2" value="same"> Giữ nguyên hình dạng, sau đó xuất hiện thêm một tế bào bên cạnh.</label>
+      <label class="choice"><input type="radio" name="p2" value="pinch"> Thay đổi hình dạng, phần giữa có thể thắt lại rồi tách thành hai.</label>
+      <label class="choice"><input type="radio" name="p2" value="bigger"> Chỉ lớn lên, không tách thành tế bào mới.</label>
+     </article>
+     <article class="q-card">
+      <div class="q-number">Dự đoán 03 · Tế bào con</div>
+      <h3>Sau khi được hình thành, em nghĩ các tế bào con sẽ:</h3>
+      <label class="choice"><input type="radio" name="p3" value="grow"> Có kích thước nhỏ, sau đó tiếp tục lớn lên.</label>
+      <label class="choice"><input type="radio" name="p3" value="same"> Giữ nguyên kích thước, không thay đổi nữa.</label>
+      <label class="choice"><input type="radio" name="p3" value="stop"> Không thể tiếp tục tồn tại sau khi được hình thành.</label>
+     </article>
+    </div>
+    <div class="reason-box">
+     <label for="initialReason">Vì sao em đưa ra những dự đoán trên?</label>
+     <textarea id="initialReason" placeholder="Viết ngắn gọn suy nghĩ ban đầu của em (không bắt buộc)..."></textarea>
+    </div>
+    <div class="form-foot">
+     <span class="small-note">Hãy chọn một phương án ở cả ba câu. Dự đoán sẽ được lưu lại để đối chiếu sau khi quan sát.</span>
+     <button type="submit" class="btn btn-primary">Ghi lại dự đoán <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="notice info" id="predictionNotice" role="status"></div>
+   </form>
+  </div>
+ </section>
+
+ <!-- STEP 2: OBSERVE -->
+ <section class="panel" id="step2">
+  <div class="panel-head">
+   <div class="kicker">O · Observe — Quan sát</div>
+   <h2>Đối chiếu video thực tế với mô hình</h2>
+   <p>Chọn một mốc quan sát ở mô hình bên phải. Video bên trái sẽ nhảy đến đoạn tương ứng, phát và tự dừng ở cuối đoạn để em có thời gian quan sát.</p>
+  </div>
+  <div class="panel-body">
+   <div class="observe-grid">
+    <section class="observe-card">
+     <div class="observe-head">
+      <div><h3>01 · VIDEO KÍNH HIỂN VI THỰC TẾ</h3><p>Ghi hình time-lapse một tế bào đang phân chia</p></div>
+      <span class="status-pill" id="videoStatus">Đang kiểm tra video</span>
+     </div>
+     <div class="video-frame">
+      <video id="cellVideo" controls playsinline preload="metadata" poster="assets/cell-video-poster.jpg">
+       <source src="assets/cell_division.mp4" type="video/mp4">
+       Trình duyệt của em không hỗ trợ phát video MP4.
+      </video>
+      <div class="video-error-cover" id="videoError"><div><strong>Chưa tải được video</strong>Hãy giải nén toàn bộ tệp ZIP và giữ nguyên thư mục <b>assets</b> nằm cạnh <b>index.html</b>. Không di chuyển riêng tệp HTML.</div></div>
+     </div>
+     <div class="video-under">
+      <div id="videoStateText">Video có ảnh xem trước. Các mốc chỉ phát những đoạn tiêu biểu và tự dừng ở cuối đoạn; em có thể dùng thanh điều khiển để xem toàn bộ video.</div>
+      <div class="source-box">Nguồn: Toshiyuki Hatano &amp; Greenfield Sluder (2011), CIL:35150 · <a href="https://doi.org/10.7295/W9CIL35150" target="_blank" rel="noopener">DOI: 10.7295/W9CIL35150</a>.</div>
+     </div>
+     <div class="segment-list" id="segmentButtons">
+      <button class="segment-btn" data-chapter="0"><strong>01 · Tế bào ban đầu</strong><span>00:00–00:12 · Một tế bào</span></button>
+      <button class="segment-btn" data-chapter="1"><strong>02 · Bắt đầu biến đổi</strong><span>00:48–01:08 · Hình dạng thay đổi</span></button>
+      <button class="segment-btn" data-chapter="2"><strong>03 · Hình thành hai tế bào</strong><span>01:08–01:30 · Thắt eo và tách</span></button>
+      <button class="segment-btn" data-chapter="3"><strong>04 · Sau phân chia</strong><span>01:30–02:00 · Hai tế bào con</span></button>
+     </div>
+    </section>
+
+    <section class="observe-card model-card">
+     <div class="observe-head">
+      <div><h3>02 · MÔ HÌNH TẾ BÀO TƯƠNG TÁC</h3><p>Chọn giai đoạn để điều khiển video và mô hình cùng lúc</p></div>
+      <span class="status-pill ready">Có thể tương tác</span>
+     </div>
+     <div class="model-tabs">
+      <button class="model-tab active" data-model="sync">Phân chia đồng bộ</button>
+      <button class="model-tab" data-model="growth">Khám phá sự lớn lên</button>
+     </div>
+     <div class="sync-view" id="syncView">
+      <div class="model-canvas">
+       <span class="model-count" id="syncCount">1 tế bào</span>
+       <div id="syncGraphic" style="width:100%;display:grid;place-items:center"></div>
+      </div>
+      <div class="model-caption">
+       <strong id="syncTitle">Một tế bào trước phân chia</strong>
+       <p id="syncDescription">Ở thời điểm đầu, video cho thấy một tế bào. Hãy quan sát hình dạng tế bào khi chuyển đến các đoạn tiếp theo.</p>
+       <div class="current-segment" id="syncTime">Mốc video: 00:00</div>
+      </div>
+      <div class="model-stage-list" id="modelStageList">
+       <button class="segment-btn active" data-chapter="0"><strong>01 · Một tế bào</strong><span>Quan sát trạng thái ban đầu</span></button>
+       <button class="segment-btn" data-chapter="1"><strong>02 · Bắt đầu thắt eo</strong><span>Hình dạng tế bào biến đổi</span></button>
+       <button class="segment-btn" data-chapter="2"><strong>03 · Phân chia</strong><span>Hai phần tế bào tách ra</span></button>
+       <button class="segment-btn" data-chapter="3"><strong>04 · Tế bào con</strong><span>Kết quả sau phân chia</span></button>
+      </div>
+      <div class="sync-controls">
+       <button class="btn btn-light" id="prevChapter">← Mốc trước</button>
+       <button class="btn btn-blue" id="playCurrent">▶ Phát lại đoạn</button>
+       <button class="btn btn-light" id="pauseBoth">Ⅱ Tạm dừng</button>
+       <button class="btn btn-light" id="nextChapter">Mốc tiếp →</button>
+      </div>
+      <p class="model-lock-note">Mô hình bên phải là sơ đồ hóa, không phải ảnh chụp tế bào. Khi video chạy, trạng thái mô hình thay đổi theo thời gian phát của video.</p>
+      <div class="sync-legend"><span><i class="legend-dot"></i>Màng và tế bào chất (minh họa)</span><span><i class="legend-dot nuc"></i>Nhân (minh họa)</span></div>
+     </div>
+     <div class="growth-view" id="growthView" hidden>
+      <div class="model-canvas" id="growthGraphic"></div>
+      <div class="growth-range"><label for="growthSlider"><b>Mức độ lớn lên</b></label><input id="growthSlider" type="range" min="0" max="100" step="5" value="0"><span class="growth-stage" id="growthStage">Tế bào con mới hình thành</span></div>
+      <div class="growth-info" id="growthInfo">Tế bào con mới hình thành có kích thước bé. Khi diễn ra trao đổi chất, kích thước và khối lượng tế bào tăng dần.</div>
+      <div class="sync-controls"><button class="btn btn-light" id="growthStart">Tế bào con mới</button><button class="btn btn-teal btn-primary" id="growthEnd">Tế bào trưởng thành</button></div>
+      <p class="model-lock-note">Đoạn video được chọn thể hiện rõ quá trình phân chia hơn là toàn bộ giai đoạn tế bào con lớn lên. Vì vậy, chế độ này dùng mô hình để khám phá sự tăng kích thước; video được tạm dừng, không ghép một cảnh không tương ứng.</p>
+     </div>
+    </section>
+   </div>
+
+   <div class="observation-task">
+    <h3>Ghi nhận bằng chứng từ video</h3>
+    <p>Đánh dấu những dấu hiệu em thực sự quan sát được trong các đoạn video. Chọn tất cả phương án phù hợp.</p>
+    <div class="evidence-grid">
+     <label class="choice"><input type="checkbox" name="evidence" value="shape"> Hình dạng của tế bào thay đổi theo thời gian.</label>
+     <label class="choice"><input type="checkbox" name="evidence" value="pinch"> Phần giữa tế bào thắt lại trước khi tách.</label>
+     <label class="choice"><input type="checkbox" name="evidence" value="two"> Từ một tế bào ban đầu, hai tế bào con được hình thành.</label>
+     <label class="choice"><input type="checkbox" name="evidence" value="same"> Tế bào giữ nguyên hình dạng và số lượng trong toàn bộ video.</label>
+    </div>
+    <div class="form-foot"><span class="small-note">Đây là hoạt động ghi nhận bằng chứng, chưa phải bài kiểm tra tính điểm.</span><button class="btn btn-primary" id="checkEvidence">Kiểm tra nhận xét</button></div>
+    <div class="task-result" id="evidenceResult" aria-live="polite"></div>
+   </div>
+
+   <div class="number-lab">
+    <div>
+     <div class="kicker">Thử nghiệm với số lượng tế bào</div>
+     <h3>Nếu các tế bào con tiếp tục phân chia thì sao?</h3>
+     <p>Điều chỉnh số chu kì. Quan sát số lượng tế bào thay đổi sau mỗi chu kì.</p>
+     <div class="cycle-control"><label for="cycleSlider"><b>Chu kì:</b></label><input type="range" id="cycleSlider" min="0" max="3" step="1" value="0"><span class="count-label" id="cycleCount">1 tế bào</span></div>
+     <div class="number-note">Giả định trong mô hình: mỗi tế bào đều phân chia một lần ở mỗi chu kì và không có tế bào chết.</div>
+    </div>
+    <div><div class="cell-grid" id="cellGrid" aria-label="Mô hình số lượng tế bào"></div><div class="number-note" id="cycleEquation">Bắt đầu: 1 tế bào</div></div>
+   </div>
+   <div class="panel-nav"><span class="small-note">Khi đã quan sát các mốc và ghi nhận bằng chứng, chuyển sang giải thích để đối chiếu dự đoán ban đầu.</span><button class="btn btn-primary" id="toExplain" disabled>Chuyển sang giải thích →</button></div>
+  </div>
+ </section>
+
+ <!-- STEP 3: EXPLAIN -->
+ <section class="panel" id="step3">
+  <div class="panel-head">
+   <div class="kicker">E · Explain — Giải thích</div>
+   <h2>Em có muốn điều chỉnh dự đoán ban đầu không?</h2>
+   <p>Quay lại các câu trả lời trước khi xem. Dựa vào video, mô hình và bằng chứng vừa ghi nhận, hãy chọn lại phương án mà em cho là hợp lý nhất.</p>
+  </div>
+  <div class="panel-body">
+   <div class="prediction-compare">
+    <div class="compare-box"><h3>Dự đoán ban đầu của em</h3><div id="initialSummary"></div></div>
+    <div class="compare-box"><h3>Bằng chứng em đã ghi nhận</h3><div id="evidenceSummary"><p>Chưa có dữ liệu.</p></div></div>
+   </div>
+   <form id="revisionForm">
+    <div class="revision-grid">
+     <article class="q-card"><div class="q-number">Đối chiếu 01</div><h3>Kết quả cuối của video là gì?</h3>
+      <label class="choice"><input type="radio" name="r1" value="one"> Vẫn là một tế bào.</label>
+      <label class="choice"><input type="radio" name="r1" value="two"> Hai tế bào con được hình thành.</label>
+      <label class="choice"><input type="radio" name="r1" value="many"> Nhiều tế bào cùng xuất hiện.</label>
+     </article>
+     <article class="q-card"><div class="q-number">Đối chiếu 02</div><h3>Dấu hiệu nào phù hợp với quá trình phân chia trong video?</h3>
+      <label class="choice"><input type="radio" name="r2" value="same"> Tế bào không thay đổi hình dạng.</label>
+      <label class="choice"><input type="radio" name="r2" value="pinch"> Tế bào thay đổi hình dạng, thắt lại rồi tách thành hai.</label>
+      <label class="choice"><input type="radio" name="r2" value="bigger"> Tế bào chỉ phình to lên.</label>
+     </article>
+     <article class="q-card"><div class="q-number">Đối chiếu 03</div><h3>Sau khi được hình thành, tế bào con sẽ:</h3>
+      <label class="choice"><input type="radio" name="r3" value="grow"> Lớn lên nhờ trao đổi chất.</label>
+      <label class="choice"><input type="radio" name="r3" value="same"> Giữ nguyên kích thước mãi mãi.</label>
+      <label class="choice"><input type="radio" name="r3" value="stop"> Ngừng mọi hoạt động sống.</label>
+     </article>
+    </div>
+    <div class="explain-panel">
+     <h3>Giải thích bằng lời của em</h3>
+     <p class="small-note">Hãy mô tả mối quan hệ giữa sự lớn lên và sự phân chia của tế bào. Không cần chép lại phần mô tả trong mô hình.</p>
+     <textarea id="studentExplanation" placeholder="Theo em, tế bào con sau khi hình thành sẽ... Khi tế bào... thì..."></textarea>
+    </div>
+    <div class="form-foot"><span class="small-note">Các câu trả lời mới sẽ được đối chiếu với dự đoán ban đầu sau khi em xác nhận.</span><button type="submit" class="btn btn-primary">Đối chiếu và hoàn thành →</button></div>
+    <div class="notice info" id="revisionNotice" role="status"></div>
+   </form>
+   <div id="revisionResult" hidden>
+    <h3 style="margin:22px 0 8px">Kết quả đối chiếu dự đoán</h3>
+    <div class="prediction-compare" id="comparisonTable"></div>
+    <div class="notice success show" style="display:block">Qua quan sát và mô hình, em có thể điều chỉnh cách hiểu: tế bào con mới hình thành có kích thước bé; nhờ trao đổi chất, tế bào lớn lên. Khi đạt đến kích thước nhất định, tế bào phân chia thành hai tế bào con.</div>
+    <div class="explain-panel">
+     <h3>Tự rà soát phần giải thích</h3>
+     <p class="small-note">Đọc lại câu trả lời của mình và đánh dấu những ý em đã trình bày được. Đây là bảng tự đối chiếu, không thay thế việc giáo viên nhận xét câu trả lời tự luận.</p>
+     <div class="rubric show" id="selfRubric">
+      <label><input type="checkbox" class="rubric-check"> Nêu được tế bào con mới hình thành có kích thước bé.</label>
+      <label><input type="checkbox" class="rubric-check"> Nêu được tế bào lớn lên nhờ trao đổi chất, kích thước và khối lượng tăng dần.</label>
+      <label><input type="checkbox" class="rubric-check"> Nêu được khi đạt kích thước nhất định, tế bào phân chia thành hai tế bào con.</label>
+     </div>
+     <div class="task-result" id="rubricResult">Em đã tự đối chiếu 0/3 tiêu chí.</div>
+    </div>
+    <div class="panel-nav"><span class="small-note">Đã hoàn thành quá trình dự đoán – quan sát – giải thích.</span><button class="btn btn-primary" id="toQuiz">Làm bài kiểm tra cuối hoạt động →</button></div>
+   </div>
+  </div>
+ </section>
+
+ <!-- STEP 4: ASSESS -->
+ <section class="panel" id="step4">
+  <div class="panel-head">
+   <div class="kicker">Check — Kiểm tra và củng cố</div>
+   <h2>Em đã hiểu mối quan hệ giữa lớn lên và phân chia chưa?</h2>
+   <p>Trả lời độc lập năm câu hỏi. Hệ thống chỉ hiển thị đáp án và giải thích sau khi em nộp bài, vì vậy hãy hoàn thành tất cả câu hỏi trước khi xem kết quả.</p>
+  </div>
+  <div class="panel-body">
+   <form id="quizForm">
+    <div class="quiz-grid">
+     <article class="quiz-item" data-answer="b" data-correct-label="Nhờ trao đổi chất, kích thước và khối lượng của tế bào tăng dần.">
+      <div class="q-number">Câu 01 · Sự lớn lên</div><h3>Tế bào con mới hình thành có kích thước bé. Điều gì giúp tế bào lớn lên?</h3>
+      <label class="choice"><input type="radio" name="q1" value="a"> Tế bào hấp thụ thêm tế bào khác để tăng kích thước.</label>
+      <label class="choice"><input type="radio" name="q1" value="b"> Nhờ quá trình trao đổi chất, kích thước và khối lượng tế bào tăng dần.</label>
+      <label class="choice"><input type="radio" name="q1" value="c"> Tế bào tự tách thành nhiều phần nhỏ.</label><div class="quiz-feedback"></div>
+     </article>
+     <article class="quiz-item" data-answer="c" data-correct-label="Tế bào lớn lên đến một kích thước nhất định thì phân chia.">
+      <div class="q-number">Câu 02 · Điều kiện phân chia</div><h3>Khi nào một tế bào sẽ phân chia theo nội dung bài học?</h3>
+      <label class="choice"><input type="radio" name="q2" value="a"> Ngay khi vừa được hình thành.</label>
+      <label class="choice"><input type="radio" name="q2" value="b"> Chỉ khi tế bào bị tác động từ bên ngoài.</label>
+      <label class="choice"><input type="radio" name="q2" value="c"> Khi tế bào lớn lên đến một kích thước nhất định.</label><div class="quiz-feedback"></div>
+     </article>
+     <article class="quiz-item" data-answer="a" data-correct-label="Một tế bào mẹ phân chia thành hai tế bào con.">
+      <div class="q-number">Câu 03 · Kết quả phân chia</div><h3>Video cho thấy một tế bào ban đầu thay đổi hình dạng rồi tách thành hai. Kết quả đó phù hợp với nhận định nào?</h3>
+      <label class="choice"><input type="radio" name="q3" value="a"> Một tế bào mẹ phân chia thành hai tế bào con.</label>
+      <label class="choice"><input type="radio" name="q3" value="b"> Một tế bào mẹ lớn lên thành một tế bào duy nhất.</label>
+      <label class="choice"><input type="radio" name="q3" value="c"> Hai tế bào kết hợp thành một tế bào.</label><div class="quiz-feedback"></div>
+     </article>
+     <article class="quiz-item" data-answer="b" data-correct-label="1 → 2 → 4 tế bào sau hai chu kì trong giả định đã nêu.">
+      <div class="q-number">Câu 04 · Vận dụng mô hình</div><h3>Bắt đầu từ một tế bào. Nếu mỗi tế bào con tiếp tục phân chia một lần ở chu kì tiếp theo và không có tế bào chết, sau hai chu kì có bao nhiêu tế bào?</h3>
+      <label class="choice"><input type="radio" name="q4" value="a"> 3 tế bào.</label>
+      <label class="choice"><input type="radio" name="q4" value="b"> 4 tế bào.</label>
+      <label class="choice"><input type="radio" name="q4" value="c"> 8 tế bào.</label><div class="quiz-feedback"></div>
+     </article>
+     <article class="quiz-item" data-answer="c" data-correct-label="Sự lớn lên làm tăng kích thước; sự phân chia làm tăng số lượng tế bào, góp phần giúp cơ thể sinh trưởng.">
+      <div class="q-number">Câu 05 · Ý nghĩa</div><h3>Sự lớn lên và sinh sản của tế bào có ý nghĩa gì đối với cơ thể đa bào?</h3>
+      <label class="choice"><input type="radio" name="q5" value="a"> Chỉ làm thay đổi hình dạng của tế bào.</label>
+      <label class="choice"><input type="radio" name="q5" value="b"> Chỉ làm tăng kích thước từng tế bào, không làm tăng số lượng.</label>
+      <label class="choice"><input type="radio" name="q5" value="c"> Làm tăng kích thước và số lượng tế bào, góp phần giúp cơ thể sinh trưởng.</label><div class="quiz-feedback"></div>
+     </article>
+    </div>
+    <div class="form-foot"><span class="small-note">Mỗi câu đúng được 1 điểm. Cần chọn đủ 5 câu trước khi nộp.</span><button type="submit" class="btn btn-primary" id="submitQuiz">Nộp bài và xem kết quả</button></div>
+   </form>
+   <div class="score-panel" id="scorePanel" aria-live="polite">
+    <div class="score-big" id="scoreNumber">0/5</div><strong id="scoreLevel"></strong><p id="scoreMessage"></p>
+    <div class="form-foot"><span class="small-note">Kết quả này phản ánh 5 câu trắc nghiệm tự động chấm.</span><button type="button" class="btn btn-light" id="retryQuiz">Làm lại bài kiểm tra</button></div>
+   </div>
+  </div>
+ </section>
+ <div class="footer">Học liệu số hỗ trợ học tập · KHTN 6 · Bài 20: Sự lớn lên và sinh sản của tế bào</div>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const chapters=[
+ {start:0,end:12,title:'Tế bào ban đầu',name:'Một tế bào trước phân chia',desc:'Ở đoạn đầu, video cho thấy một tế bào. Hãy ghi nhớ số lượng ban đầu trước khi quan sát sự thay đổi.',rate:1.0},
+ {start:48,end:68,title:'Bắt đầu biến đổi',name:'Hình dạng tế bào bắt đầu thay đổi',desc:'Tế bào thay đổi hình dạng; vùng giữa bắt đầu thắt lại. Mô hình khái quát hóa sự thay đổi đường viền của tế bào.',rate:1.0},
+ {start:68,end:90,title:'Hình thành hai tế bào',name:'Tế bào tách thành hai tế bào con',desc:'Phần tế bào mẹ tách dần thành hai phần riêng biệt, tạo ra hai tế bào con.',rate:1.0},
+ {start:90,end:120,title:'Sau phân chia',name:'Hai tế bào con sau phân chia',desc:'Ở đoạn cuối, có thể nhận thấy hai tế bào con đã được hình thành. Mỗi tế bào con có thể tiếp tục lớn lên.',rate:1.0}
+];
+let savedPred={}, evidenceChecked=false, activeChapter=0, stopAt=null, predictionSubmitted=false, revisionSubmitted=false, quizSubmitted=false;
+const video=$('cellVideo');
+
+// Main lesson navigation: later steps unlock only after the previous task is completed.
+function setStep(n){
+ if(n>1&&!predictionSubmitted){showNotice('predictionNotice','Em hãy hoàn thành phần dự đoán trước khi chuyển sang quan sát.','info');return;}
+ if(n>2&&!evidenceChecked){alert('Em hãy hoàn thành việc ghi nhận bằng chứng ở bước Quan sát trước nhé.');return;}
+ if(n>3&&!revisionSubmitted){alert('Em hãy hoàn thành phần Giải thích và đối chiếu dự đoán trước nhé.');return;}
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ $('step'+n).classList.add('active');
+ document.querySelectorAll('.flow-step').forEach(b=>{
+  const k=Number(b.dataset.step); b.classList.toggle('active',k===n); b.classList.toggle('done',k<n); b.disabled=k>n&&!((k===2&&predictionSubmitted)||(k===3&&evidenceChecked)||(k===4&&revisionSubmitted));
+ });
+ window.scrollTo({top:document.querySelector('.flowbar').getBoundingClientRect().top+window.scrollY-15,behavior:'smooth'});
+}
+document.querySelectorAll('.flow-step').forEach(b=>b.addEventListener('click',()=>setStep(Number(b.dataset.step))));
+function showNotice(id,msg,type='info'){const el=$(id);el.textContent=msg;el.className='notice '+type+' show';}
+
+// Step 1 – collect predictions, without marking answers right or wrong.
+$('predictionForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const p1=document.querySelector('input[name="p1"]:checked');
+ const p2=document.querySelector('input[name="p2"]:checked');
+ const p3=document.querySelector('input[name="p3"]:checked');
+ if(!p1||!p2||!p3){showNotice('predictionNotice','Em hãy chọn một phương án ở cả ba câu trước khi ghi lại dự đoán.','error');return;}
+ savedPred={p1:p1.value,p2:p2.value,p3:p3.value,reason:$('initialReason').value.trim()};
+ predictionSubmitted=true;
+ showNotice('predictionNotice','Đã ghi lại dự đoán ban đầu của em. Các lựa chọn chưa được chấm đúng/sai; hãy chuyển sang quan sát để kiểm chứng bằng bằng chứng.','success');
+ document.querySelector('[data-step="2"]').disabled=false;
+ setTimeout(()=>setStep(2),650);
+});
+
+// SVG model for the division stages. It is intentionally schematic, not a literal copy of the micrograph.
+function cellCircle(x,y,r,label,showNucleus=true){
+ return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="#a9d9d6" stroke="#3f898b" stroke-width="3"/><circle cx="${x}" cy="${y}" r="${r*.72}" fill="#c4e7e3" opacity=".58"/>${showNucleus?`<circle cx="${x}" cy="${y}" r="${r*.24}" fill="#8798c3" stroke="#5c6f9c" stroke-width="2"/>`:''}</g>`;
+}
+function oneCellSvg(){return `<svg viewBox="0 0 380 220" role="img" aria-label="Sơ đồ một tế bào trước phân chia"><defs><radialGradient id="cyto" cx="35%" cy="30%"><stop stop-color="#e3f5f1"/><stop offset="1" stop-color="#98cfcb"/></radialGradient></defs><circle cx="190" cy="108" r="63" fill="url(#cyto)" stroke="#37858a" stroke-width="3"/><circle cx="190" cy="108" r="46" fill="#c5e8e3" opacity=".55"/><circle cx="190" cy="108" r="17" fill="#8295c3" stroke="#5d709d" stroke-width="2"/><text x="190" y="196" text-anchor="middle" fill="#527486" font-size="12" font-weight="700">1 tế bào</text></svg>`;}
+function constrictSvg(p){
+ const top=55+37*p, bottom=165-37*p;
+ const d=`M 126 110 C 126 78 148 55 174 55 C 182 55 185 ${top-5} 190 ${top} C 195 ${top-5} 198 55 206 55 C 232 55 254 78 254 110 C 254 142 232 165 206 165 C 198 165 195 ${bottom+5} 190 ${bottom} C 185 ${bottom+5} 182 165 174 165 C 148 165 126 142 126 110 Z`;
+ return `<svg viewBox="0 0 380 220" role="img" aria-label="Sơ đồ tế bào đang thắt eo để phân chia"><path d="${d}" fill="#a9d9d6" stroke="#3f898b" stroke-width="3"/><path d="${d}" fill="#c4e7e3" opacity=".45"/><circle cx="160" cy="109" r="${12+5*p}" fill="#8798c3" stroke="#5c6f9c" stroke-width="2" opacity="${Math.min(1,p*1.8)}"/><circle cx="220" cy="109" r="${12+5*p}" fill="#8798c3" stroke="#5c6f9c" stroke-width="2" opacity="${Math.min(1,p*1.8)}"/><text x="190" y="196" text-anchor="middle" fill="#527486" font-size="12" font-weight="700">Đang hình thành hai phần tế bào</text></svg>`;
+}
+function separatingSvg(p){
+ const spread=8+36*p, r=57-3*p;
+ const left=190-spread,right=190+spread;
+ return `<svg viewBox="0 0 380 220" role="img" aria-label="Sơ đồ hai tế bào con đang tách nhau"><g><circle cx="${left}" cy="108" r="${r}" fill="#a9d9d6" stroke="#3f898b" stroke-width="3"/><circle cx="${left}" cy="108" r="${r*.72}" fill="#c4e7e3" opacity=".58"/><circle cx="${left}" cy="108" r="14" fill="#8798c3" stroke="#5c6f9c" stroke-width="2"/><circle cx="${right}" cy="108" r="${r}" fill="#a9d9d6" stroke="#3f898b" stroke-width="3"/><circle cx="${right}" cy="108" r="${r*.72}" fill="#c4e7e3" opacity=".58"/><circle cx="${right}" cy="108" r="14" fill="#8798c3" stroke="#5c6f9c" stroke-width="2"/></g><text x="190" y="196" text-anchor="middle" fill="#527486" font-size="12" font-weight="700">Hai tế bào con</text></svg>`;
+}
+function twoCellsSvg(){return `<svg viewBox="0 0 380 220" role="img" aria-label="Hai tế bào con sau phân chia">${cellCircle(143,108,51,'',true)}${cellCircle(237,108,51,'',true)}<text x="190" y="196" text-anchor="middle" fill="#527486" font-size="12" font-weight="700">2 tế bào con</text></svg>`;}
+function chapterForTime(t){if(t<48)return 0;if(t<68)return 1;if(t<90)return 2;return 3;}
+function renderSyncedModel(t){
+ let graphic,title,desc,count;
+ if(t<48){graphic=oneCellSvg();title='Một tế bào trước phân chia';desc='Ở thời điểm đầu, video cho thấy một tế bào. Hãy ghi nhớ số lượng ban đầu trước khi quan sát sự thay đổi.';count='1 tế bào';}
+ else if(t<68){const p=Math.max(0,Math.min(1,(t-48)/20));graphic=constrictSvg(p);title='Hình dạng tế bào bắt đầu thay đổi';desc='Đường viền tế bào thay đổi và vùng giữa dần thắt lại. Mô hình đang khái quát hóa chuyển động quan sát được trong video.';count='1 tế bào đang phân chia';}
+ else if(t<90){const p=Math.max(0,Math.min(1,(t-68)/22));graphic=separatingSvg(p);title='Tế bào tách thành hai tế bào con';desc='Hai phần tế bào ngày càng tách xa nhau, thể hiện kết quả của quá trình phân chia.';count='2 tế bào con';}
+ else{graphic=twoCellsSvg();title='Hai tế bào con sau phân chia';desc='Video cho thấy hai tế bào con đã được hình thành. Trong cơ thể, các tế bào con mới có thể tiếp tục lớn lên.';count='2 tế bào con';}
+ $('syncGraphic').innerHTML=graphic;$('syncTitle').textContent=title;$('syncDescription').textContent=desc;$('syncCount').textContent=count;$('syncTime').textContent='Mốc video: '+formatTime(t);
+ const ch=chapterForTime(t);document.querySelectorAll('.segment-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.chapter)===ch));
+}
+function formatTime(sec){const m=Math.floor(sec/60),s=Math.floor(sec%60);return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+function selectChapter(index,play=true){
+ activeChapter=Math.max(0,Math.min(chapters.length-1,index));const c=chapters[activeChapter];
+ if(!$('syncView').hidden && !$('growthView').hidden) return;
+ if(!$('growthView').hidden){showModelTab('sync');}
+ if(video.readyState===0&&!video.querySelector('source'))return;
+ if(video.readyState<1){
+  $('videoStateText').textContent='Đang tải thông tin video. Mốc quan sát sẽ được phát ngay khi video sẵn sàng.';
+  video.addEventListener('loadedmetadata',()=>selectChapter(activeChapter,play),{once:true});
+  return;
+ }
+ try{video.currentTime=c.start;}catch(err){$('videoStateText').textContent='Không thể chuyển đến mốc video. Hãy tải lại trang và thử lại.';return;}
+ renderSyncedModel(c.start);stopAt=c.end;video.playbackRate=c.rate;
+ $('videoStateText').textContent=`Đang phát đoạn ${activeChapter+1}: ${c.title}. Video sẽ tự dừng tại ${formatTime(c.end)}.`;
+ if(play){video.play().then(()=>{$('videoStatus').textContent='Video đang phát';$('videoStatus').classList.add('ready');}).catch(()=>{$('videoStateText').textContent='Trình duyệt chưa phát tự động. Hãy nhấn nút phát trên video để tiếp tục.';});}
+ document.querySelectorAll('.segment-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.chapter)===activeChapter));
+}
+document.querySelectorAll('.segment-btn').forEach(b=>b.addEventListener('click',()=>selectChapter(Number(b.dataset.chapter),true)));
+$('prevChapter').addEventListener('click',()=>selectChapter(activeChapter-1,true));
+$('nextChapter').addEventListener('click',()=>selectChapter(activeChapter+1,true));
+$('playCurrent').addEventListener('click',()=>selectChapter(activeChapter,true));
+$('pauseBoth').addEventListener('click',()=>{video.pause();$('videoStateText').textContent='Video và mô hình đã tạm dừng tại '+formatTime(video.currentTime)+'. Em có thể quan sát kỹ khung hình hiện tại.';});
+video.addEventListener('loadedmetadata',()=>{
+ $('videoStatus').textContent='Video đã sẵn sàng · '+formatTime(video.duration);$('videoStatus').classList.add('ready');
+ $('videoStateText').textContent='Đã tải video thành công. Chọn một mốc quan sát để phát đoạn tương ứng.';
+ renderSyncedModel(0);
+});
+video.addEventListener('error',()=>{
+ $('videoStatus').textContent='Không tải được video';$('videoStatus').classList.remove('ready');$('videoError').classList.add('show');
+ $('videoStateText').textContent='Không tìm thấy hoặc không đọc được assets/cell_division.mp4. Kiểm tra cấu trúc thư mục trong gói ZIP.';
+});
+video.addEventListener('timeupdate',()=>{
+ if(!$('syncView').hidden){renderSyncedModel(video.currentTime);}
+ if(stopAt!==null&&video.currentTime>=stopAt-.08){video.pause();stopAt=null;$('videoStateText').textContent='Đã hết đoạn quan sát. Hãy ghi nhận dấu hiệu hoặc chọn mốc tiếp theo.';}
+});
+video.addEventListener('pause',()=>{if(video.readyState>=2&&stopAt===null&&$('videoStatus').classList.contains('ready'))$('videoStatus').textContent='Video đã tạm dừng';});
+video.addEventListener('play',()=>{$('videoStatus').textContent='Video đang phát';$('videoStatus').classList.add('ready');});
+renderSyncedModel(0);
+
+// Model tabs. Growth is deliberately explored as a separate schematic because the selected clip shows division more clearly.
+function showModelTab(which){
+ const sync=which==='sync';$('syncView').hidden=!sync;$('growthView').hidden=sync;
+ document.querySelectorAll('.model-tab').forEach(b=>b.classList.toggle('active',b.dataset.model===which));
+ if(sync){$('videoStateText').textContent='Chế độ phân chia đồng bộ: chọn mốc trên mô hình để video phát đúng đoạn.';renderSyncedModel(video.currentTime||0);}
+ else{video.pause();stopAt=null;$('videoStateText').textContent='Video đang tạm dừng. Phần lớn lên được khám phá bằng mô hình sơ đồ ở bên phải; không ghép với một cảnh video không tương ứng.';renderGrowth();}
+}
+document.querySelectorAll('.model-tab').forEach(b=>b.addEventListener('click',()=>showModelTab(b.dataset.model)));
+function renderGrowth(){
+ const v=Number($('growthSlider').value),r=31+v*.42,nr=8+v*.11;
+ const stage=v<30?'Tế bào con mới hình thành':v<75?'Tế bào đang lớn lên':'Tế bào trưởng thành';
+ const desc=v<30?'Tế bào con mới hình thành có kích thước bé.':v<75?'Nhờ trao đổi chất, kích thước và khối lượng của tế bào tăng dần.':'Tế bào đã lớn lên và đạt đến kích thước nhất định; sau đó tế bào có thể phân chia.';
+ $('growthGraphic').innerHTML=`<svg viewBox="0 0 380 230" role="img" aria-label="Mô hình tế bào lớn lên"><defs><radialGradient id="growGrad" cx="32%" cy="28%"><stop stop-color="#e5f6f1"/><stop offset="1" stop-color="#8fcac5"/></radialGradient></defs><circle cx="190" cy="107" r="${r}" fill="url(#growGrad)" stroke="#38868a" stroke-width="3"/><circle cx="190" cy="107" r="${r*.76}" fill="#c7eae5" opacity=".42"/><circle cx="190" cy="107" r="${nr}" fill="#8295c3" stroke="#5d709d" stroke-width="2"/><path d="M ${190+r*.55} ${107-r*.35} L 294 57 L 330 57" stroke="#3e7f87" stroke-width="1.6" fill="none"/><text x="333" y="53" font-size="11" fill="#315f72" text-anchor="end">Màng tế bào</text><path d="M ${190+nr*.7} 107 L 283 150 L 330 150" stroke="#6579aa" stroke-width="1.6" fill="none"/><text x="330" y="145" font-size="11" fill="#526b91" text-anchor="end">Nhân</text><text x="190" y="210" text-anchor="middle" font-size="12" fill="#527486" font-weight="700">${stage}</text></svg>`;
+ $('growthStage').textContent=stage;$('growthInfo').textContent=desc;
+}
+$('growthSlider').addEventListener('input',renderGrowth);$('growthStart').addEventListener('click',()=>{$('growthSlider').value=0;renderGrowth();});$('growthEnd').addEventListener('click',()=>{$('growthSlider').value=100;renderGrowth();});renderGrowth();
+
+// Number-of-cells experiment.
+function renderCount(){const n=Number($('cycleSlider').value),count=2**n;$('cycleCount').textContent=count+' tế bào';$('cellGrid').innerHTML=Array.from({length:count},()=>'<span class="mini-cell" aria-hidden="true"></span>').join('');$('cycleEquation').textContent=['Bắt đầu: 1 tế bào','Sau 1 chu kì: 1 → 2 tế bào','Sau 2 chu kì: 1 → 2 → 4 tế bào','Sau 3 chu kì: 1 → 2 → 4 → 8 tế bào'][n];}
+$('cycleSlider').addEventListener('input',renderCount);renderCount();
+
+// Evidence selection is checked as a learning activity, not counted in the final quiz score.
+$('checkEvidence').addEventListener('click',()=>{
+ const checked=[...document.querySelectorAll('input[name="evidence"]:checked')].map(x=>x.value).sort();
+ const expected=['pinch','shape','two'];
+ if(checked.length===0){$('evidenceResult').textContent='Em hãy chọn những dấu hiệu quan sát được trước khi kiểm tra.';$('evidenceResult').style.color='var(--red)';return;}
+ const isExact=checked.length===expected.length&&expected.every((v,i)=>v===checked[i]);
+ $('evidenceResult').textContent=isExact?'Em đã chọn đúng các dấu hiệu chính: tế bào thay đổi hình dạng, vùng giữa thắt lại và hai tế bào con được hình thành.':'Em hãy xem lại các đoạn 02–04. Chú ý sự thay đổi hình dạng, vùng giữa tế bào và số lượng tế bào ở cuối video.';
+ $('evidenceResult').style.color=isExact?'var(--teal)':'var(--red)';
+ evidenceChecked=true;$('toExplain').disabled=false;document.querySelector('[data-step="3"]').disabled=false;
+});
+$('toExplain').addEventListener('click',()=>{populateSummary();setStep(3);});
+function labelPred(k,v){const map={p1:{one:'Vẫn một tế bào',two:'Hai tế bào con',many:'Nhiều hơn hai tế bào'},p2:{same:'Giữ nguyên hình dạng',pinch:'Thay đổi hình dạng, thắt eo rồi tách',bigger:'Chỉ lớn lên, không phân chia'},p3:{grow:'Tế bào con nhỏ rồi lớn lên',same:'Giữ nguyên kích thước',stop:'Ngừng hoạt động'}};return map[k]?.[v]||'Chưa có lựa chọn';}
+function populateSummary(){
+ $('initialSummary').innerHTML=`<p><b>Số lượng:</b> ${labelPred('p1',savedPred.p1)}</p><p><b>Dấu hiệu:</b> ${labelPred('p2',savedPred.p2)}</p><p><b>Tế bào con:</b> ${labelPred('p3',savedPred.p3)}</p>`;
+ const vals=[...document.querySelectorAll('input[name="evidence"]:checked')].map(x=>x.parentElement.textContent.trim());
+ $('evidenceSummary').innerHTML=vals.length?vals.map(v=>`<p>✓ ${v}</p>`).join(''):'<p>Chưa ghi nhận bằng chứng.</p>';
+}
+
+// Step 3 – update the initial prediction and compare only after submission.
+$('revisionForm').addEventListener('submit',e=>{
+ e.preventDefault();const r1=document.querySelector('input[name="r1"]:checked'),r2=document.querySelector('input[name="r2"]:checked'),r3=document.querySelector('input[name="r3"]:checked');
+ if(!r1||!r2||!r3){showNotice('revisionNotice','Em hãy chọn phương án cho cả ba câu trước khi đối chiếu.','error');return;}
+ const revised={p1:r1.value,p2:r2.value,p3:r3.value};revisionSubmitted=true;
+ const keys=['p1','p2','p3'];$('comparisonTable').innerHTML=keys.map(k=>{
+ const correct={p1:'two',p2:'pinch',p3:'grow'}[k];const was=savedPred[k]===correct,now=revised[k]===correct;
+ return `<div class="compare-box"><h3>${{p1:'Số lượng tế bào',p2:'Dấu hiệu phân chia',p3:'Điều xảy ra với tế bào con'}[k]}</h3><p><b>Ban đầu:</b> ${labelPred(k,savedPred[k])}</p><p><b>Sau quan sát:</b> <span class="ans">${labelPred(k,revised[k])}</span></p><p>${now?'✓ Phương án sau quan sát phù hợp với bằng chứng.': '↻ Em vẫn cần xem lại nội dung này.'} ${was?'Dự đoán ban đầu đã phù hợp.': 'Em đã có cơ hội điều chỉnh dự đoán ban đầu.'}</p></div>`;
+ }).join('');
+ $('revisionForm').hidden=true;$('revisionResult').hidden=false;
+ document.querySelector('[data-step="4"]').disabled=false;
+});
+document.querySelectorAll('.rubric-check').forEach(x=>x.addEventListener('change',()=>{const n=[...document.querySelectorAll('.rubric-check')].filter(c=>c.checked).length;$('rubricResult').textContent=`Em đã tự đối chiếu ${n}/3 tiêu chí.`;}));
+$('toQuiz').addEventListener('click',()=>setStep(4));
+
+// Step 4 – independent quiz. No correctness feedback is shown until the learner submits all five answers.
+$('quizForm').addEventListener('submit',e=>{
+ e.preventDefault();if(quizSubmitted)return;
+ const items=[...document.querySelectorAll('.quiz-item')];let score=0,missing=[];
+ items.forEach((item,i)=>{const selected=item.querySelector('input:checked');if(!selected)missing.push(i+1);});
+ if(missing.length){alert('Em chưa trả lời câu '+missing.join(', ')+'. Hãy hoàn thành đủ 5 câu trước khi nộp.');return;}
+ items.forEach((item,i)=>{
+  const selected=item.querySelector('input:checked'),correct=selected.value===item.dataset.answer,fb=item.querySelector('.quiz-feedback');
+  if(correct){score++;item.classList.add('correct-answer');fb.className='quiz-feedback show correct';fb.textContent='Chính xác. '+item.dataset.correctLabel;}
+  else{item.classList.add('wrong-answer');fb.className='quiz-feedback show wrong';const right=item.querySelector(`input[value="${item.dataset.answer}"]`).parentElement.textContent.trim();fb.textContent='Chưa chính xác. Đáp án phù hợp là: '+right+' '+item.dataset.correctLabel;}
+  item.querySelectorAll('input').forEach(inp=>inp.disabled=true);
+ });
+ quizSubmitted=true;$('submitQuiz').disabled=true;$('scorePanel').classList.add('show');$('scoreNumber').textContent=score+'/5';
+ $('scoreLevel').textContent=score===5?'Hoàn thành rất tốt':score>=4?'Nắm vững phần lớn nội dung':score===3?'Đã nắm được một phần – cần củng cố thêm':'Em nên ôn lại tiến trình lớn lên và phân chia của tế bào';
+ $('scoreMessage').textContent=score>=4?'Em đã thể hiện tốt khả năng nhận biết, giải thích và vận dụng kiến thức.':score===3?'Hãy xem lại chế độ “Khám phá sự lớn lên” và các mốc video về phân chia, sau đó thử làm lại.':'Hãy quay lại quan sát mô hình và đọc lại các giải thích sau từng câu sai trước khi làm lại.';
+});
+$('retryQuiz').addEventListener('click',()=>{
+ document.querySelectorAll('.quiz-item').forEach(item=>{item.classList.remove('correct-answer','wrong-answer');item.querySelectorAll('input').forEach(inp=>{inp.disabled=false;inp.checked=false;});const fb=item.querySelector('.quiz-feedback');fb.className='quiz-feedback';fb.textContent='';});
+ quizSubmitted=false;$('submitQuiz').disabled=false;$('scorePanel').classList.remove('show');$('quizForm').scrollIntoView({behavior:'smooth',block:'start'});
+});
+</script>
+</body>
+</html>
